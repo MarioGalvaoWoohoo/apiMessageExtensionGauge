@@ -1,7 +1,7 @@
 ### Passo a passo
 Clone Repositório
 ```sh
-Adicionar a url do git para o projeto
+[Projeto API Message Extension](https://github.com/MarioGalvaoWoohoo/apiMessageExtensionGauge.git)
 ```
 ```sh
 cd apiMessageExtensionGauge/
@@ -28,17 +28,11 @@ APP_URL=http://localhost:8180
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
-DB_DATABASE=nome_que_desejar_db
-DB_USERNAME=root
-DB_PASSWORD=qualquer_senha_aqui
+DB_DATABASE=api-message
+DB_USERNAME=api-message
+DB_PASSWORD=
 
-CACHE_DRIVER=redis
-QUEUE_CONNECTION=redis
-SESSION_DRIVER=redis
 
-REDIS_HOST=redis
-REDIS_PASSWORD=null
-REDIS_PORT=6379
 ```
 
 
@@ -50,7 +44,7 @@ docker-compose up -d
 
 Acessar o container
 ```sh
-docker-compose exec laravel_8 bash
+docker-compose exec app-gauge-message bash
 ```
 
 
