@@ -3,14 +3,9 @@
 namespace App\Services;
 
 use App\Models\Message;
-use App\Repositories\RepositoryInterface;
-use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
-use InvalidArgumentException;
-use stdClass;
-
-use function PHPUnit\Framework\isNull;
+use App\Repositories\RepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MessageService
 {
@@ -37,7 +32,7 @@ class MessageService
         return $message;
     }
 
-    public function create(array $data): Message
+    public function create($data): Message
     {
         return $this->messageRepository->create($data);
     }

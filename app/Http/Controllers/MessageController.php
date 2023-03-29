@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MessageRequest;
 use App\Models\Message;
 use App\Services\MessageService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\{Request, Response};
+use Illuminate\Support\Facades\Validator;
 
 class MessageController extends Controller
 {
@@ -35,6 +37,20 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         try {
+            $validatedData = Validator::make($request->all(), [
+                'title' => 'required|min:20|max:150',
+                'message' => 'required|min:50|max:255',
+                // 'notify' => 'required',
+                // 'status' => 'required',
+                'initial_display' => 'required|date',
+                'final_display' => 'required|date',
+                'user_id' => 'required'
+            ]);
+
+            if ($validatedData->fails()) {
+                return response()->json($validatedData->errors(), 422);
+            }
+
             $message = $this->messageService->create($request->all());
             return response()->json([
                 'message' => 'Cadastro realizado com sucesso',
@@ -52,6 +68,21 @@ class MessageController extends Controller
     {
         try {
             $this->messageService->findById($id);
+
+            $validatedData = Validator::make($request->all(), [
+                'title' => 'required|min:20|max:150',
+                'message' => 'required|min:50|max:255',
+                // 'notify' => 'required',
+                // 'status' => 'required',
+                'initial_display' => 'required|date',
+                'final_display' => 'required|date',
+                'user_id' => 'required'
+            ]);
+
+            if ($validatedData->fails()) {
+                return response()->json($validatedData->errors(), 422);
+            }
+
             $message = $this->messageService->update($id, $request->all());
             return response()->json([
                 'message' => 'Mensagem atualizada com sucesso!',
