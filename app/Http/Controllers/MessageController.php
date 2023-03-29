@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Services\MessageService;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\{Request, Response};
 
 class MessageController extends Controller
 {
@@ -17,43 +18,69 @@ class MessageController extends Controller
 
     public function index()
     {
-        $messages =  $this->messageService->getAll();
-        return response()->json([
-            'message' => 'Listagem realizada com sucesso',
-            'data' => $messages,
-        ]);
+        try {
+            $messages =  $this->messageService->getAll();
+            return response()->json([
+                'message' => 'Listagem realizada com sucesso',
+                'data' => $messages,
+            ], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => false,
+            ], 404);
+        }
     }
 
     public function store(Request $request)
     {
-        $message = new Message();
-        $message->title = $request->input('title');
-        $message->content = $request->input('content');
-        $message->save();
-        return response()->json($message);
+        try {
+            $message = $this->messageService->create($request->all());
+            return response()->json([
+                'message' => 'Cadastro realizado com sucesso',
+                'data' => $message,
+            ], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => false,
+            ], 404);
+        }
     }
 
-    public function show(Message $message)
+    public function update(Request $request, int $id)
     {
-        return view('messages.show', compact('message'));
+        try {
+            $this->messageService->findById($id);
+            $message = $this->messageService->update($id, $request->all());
+            return response()->json([
+                'message' => 'Mensagem atualizada com sucesso!',
+                'data' => $message,
+            ], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => false,
+            ], 404);
+        }
+
     }
 
-    public function edit(Message $message)
+    public function destroy(int $id)
     {
-        return view('messages.edit', compact('message'));
-    }
+        try {
+            $this->messageService->findById($id);
+            $this->messageService->delete($id);
+            return response()->json([
+                'message' => 'Mensagem removida com sucesso!',
+                'data' => [],
+            ], 204);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => false,
+            ], 404);
+        }
 
-    public function update(Request $request, Message $message)
-    {
-        $message->title = $request->input('title');
-        $message->content = $request->input('content');
-        $message->save();
-        return redirect()->route('messages.show', $message->id);
-    }
-
-    public function destroy(Message $message)
-    {
-        $message->delete();
-        return redirect()->route('messages.index');
     }
 }

@@ -25,12 +25,12 @@ class MessageRepository implements RepositoryInterface
         return $this->model->create($data);
     }
 
-    public function find(int $id): ?Model
+    public function findById(int $id): ?Model
     {
         return $this->model->find($id);
     }
 
-    public function update(int $id, array $data): Model
+    public function update(int $id, array $data): bool
     {
         return $this->model->find($id)->update($data);
     }
