@@ -22,6 +22,9 @@ Route::prefix('/v1')->group(function () {
         Route::get('/messages/{id}', [MessageController::class, 'show'])->name('messages.show');
         Route::put('/messages/{id}', [MessageController::class, 'update'])->name('messages.update');
         Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('messages.destroy');
+
+        Route::get('/messagesIsActive', [MessageController::class, 'messagesIsActive'])->name('messages.messageIsActive');
+        Route::get('/messagesOnTimeIsActive', [MessageController::class, 'messagesOnTimeIsActive'])->name('messages.messageOnTimeIsActive');
     });
 });
 

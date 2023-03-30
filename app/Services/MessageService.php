@@ -50,4 +50,14 @@ class MessageService
     {
         return $this->messageRepository->delete($id);
     }
+
+    public function getMessageIsActive(): Collection
+    {
+        return $this->messageRepository->getAllIsActive();
+    }
+
+    public function getMessageOnTimeIsActive(): Collection
+    {
+        return $this->messageRepository->getMessagesOnTimeIsActive();
+    }
 }

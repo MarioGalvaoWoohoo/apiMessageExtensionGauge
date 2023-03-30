@@ -16,9 +16,12 @@ class MessageResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'comment' => $this->comment,
-            'stars' => $this->stars,
-            'date' => Carbon::make($this->created_at)->format('Y-m-d'),
+            'id' => $this->id,
+            'title' => $this->title,
+            'message' => $this->message,
+            'status' => $this->status,
+            'initialDisplay' => Carbon::make($this->initial_display)->format('Y-m-d'),
+            'finalDisplay' => Carbon::make($this->final_display)->format('Y-m-d'),
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MessageRequest;
+use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use App\Services\MessageService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -31,6 +32,38 @@ class MessageController extends Controller
                 'message' => $e->getMessage(),
                 'data' => false,
             ], 404);
+        }
+    }
+
+    public function messagesIsActive()
+    {
+        try {
+            $messages =  $this->messageService->getMessageIsActive();
+            return response()->json([
+                'message' => 'Listagem realizada com sucesso',
+                'data' => MessageResource::collection($messages),
+            ], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => false,
+            ], 500);
+        }
+    }
+
+    public function messagesOnTimeIsActive()
+    {
+        try {
+            $messages =  $this->messageService->getMessageOnTimeIsActive();
+            return response()->json([
+                'message' => 'Listagem realizada com sucesso',
+                'data' => MessageResource::collection($messages),
+            ], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => false,
+            ], 500);
         }
     }
 

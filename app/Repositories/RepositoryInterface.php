@@ -9,6 +9,10 @@ interface RepositoryInterface
 {
     public function getAll(): Collection;
 
+    public function getAllIsActive(): Collection;
+
+    public function getMessagesOnTimeIsActive(): Collection;
+
     public function create(array $data): Model;
 
     public function findById(int $id): ?Model;

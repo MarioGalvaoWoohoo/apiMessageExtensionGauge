@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Message;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,5 +39,17 @@ class MessageRepository implements RepositoryInterface
     public function delete(int $id): bool
     {
         return $this->model->find($id)->delete();
+    }
+
+    public function getAllIsActive(): Collection
+    {
+        return $this->model->where('status', 1)->get();
+    }
+
+    public function getMessagesOnTimeIsActive(): Collection
+    {
+        $now = Carbon::now();
+
+        return $this->model->whereRaw('? between initial_display and final_display', [$now])->where('status', 1)->get();
     }
 }
