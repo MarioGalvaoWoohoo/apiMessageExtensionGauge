@@ -4,14 +4,14 @@ namespace App\Services;
 
 use App\Models\Message;
 use Illuminate\Support\Collection;
-use App\Repositories\RepositoryInterface;
+use App\Repositories\MessageRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MessageService
 {
     protected $messageRepository;
 
-    public function __construct(RepositoryInterface $messageRepository)
+    public function __construct(MessageRepositoryInterface $messageRepository)
     {
         $this->messageRepository = $messageRepository;
     }
@@ -48,6 +48,7 @@ class MessageService
 
     public function delete(int $id): bool
     {
+        $this->findById($id);
         return $this->messageRepository->delete($id);
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,14 +18,22 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')->group(function () {
     Route::middleware(['auth.api'])->group(function () {
-        Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
-        Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
-        Route::get('/messages/{id}', [MessageController::class, 'show'])->name('messages.show');
-        Route::put('/messages/{id}', [MessageController::class, 'update'])->name('messages.update');
-        Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('messages.destroy');
 
+        // Mensagens
+        Route::get('/messages', [MessageController::class, 'listAll'])->name('messages.listAll');
+        Route::post('/message', [MessageController::class, 'store'])->name('messages.store');
+        Route::get('/message/{id}', [MessageController::class, 'show'])->name('messages.show');
+        Route::put('/message/{id}', [MessageController::class, 'update'])->name('messages.update');
+        Route::delete('/message/{id}', [MessageController::class, 'destroy'])->name('messages.destroy');
         Route::get('/messagesIsActive', [MessageController::class, 'messagesIsActive'])->name('messages.messageIsActive');
         Route::get('/messagesOnTimeIsActive', [MessageController::class, 'messagesOnTimeIsActive'])->name('messages.messageOnTimeIsActive');
+
+        // Usuários
+        Route::get('/users', [UserController::class, 'listAll'])->name('users.listAll');
+        Route::post('/user', [UserController::class, 'store'])->name('users.store');
+        Route::get('/user/{id}', [UserController::class, 'show'])->name('users.show');
+        Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 });
 

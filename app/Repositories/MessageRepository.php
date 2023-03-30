@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-class MessageRepository implements RepositoryInterface
+class MessageRepository implements MessageRepositoryInterface
 {
     protected $model;
 

@@ -19,7 +19,7 @@ class MessageController extends Controller
         $this->messageService = $messageService;
     }
 
-    public function index()
+    public function listAll()
     {
         try {
             $messages =  $this->messageService->getAll();
@@ -133,12 +133,11 @@ class MessageController extends Controller
     public function destroy(int $id)
     {
         try {
-            $this->messageService->findById($id);
             $this->messageService->delete($id);
             return response()->json([
                 'message' => 'Mensagem removida com sucesso!',
                 'data' => [],
-            ], 204);
+            ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
