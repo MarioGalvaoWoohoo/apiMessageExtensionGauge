@@ -5,9 +5,9 @@ namespace App\Providers;
 use App\Repositories\MessageRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\UserRepositoryInterface;
-use App\Services\LoginService;
 use App\Services\MessageService;
 use App\Services\UserService;
+use App\Services\AuthService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -36,8 +36,8 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(LoginService::class, function ($app) {
-            return new LoginService(
+        $this->app->singleton(AuthService::class, function ($app) {
+            return new AuthService(
                 $app->make(UserRepositoryInterface::class)
             );
         });

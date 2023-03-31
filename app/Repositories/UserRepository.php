@@ -32,7 +32,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function getByEmail(string $email): ?User
     {
-        return $this->model->find($email);
+        return $this->model->where('email', $email)->first();
     }
 
     public function update(int $id, array $data): bool

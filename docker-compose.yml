@@ -46,6 +46,12 @@ services:
         networks:
             - api-extension-gauge
 
+    redis:
+        container_name: redis-gauge-message
+        image: redis:latest
+        networks:
+            - api-extension-gauge
+
 networks:
     api-extension-gauge:
         driver: bridge

@@ -6,8 +6,10 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use App\Repositories\userRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Str;
 
-class LoginService
+class AuthService
 {
     protected $userRepository;
 
@@ -16,7 +18,7 @@ class LoginService
         $this->userRepository = $userRepository;
     }
 
-    public function login(string $email, string $password)
+    public function authenticateUser(string $email, string $password): ?string
     {
         $user = $this->userRepository->getByEmail($email);
 
@@ -26,7 +28,15 @@ class LoginService
 
         auth()->login($user);
 
-        return $user;
+        $sessionId = Str::random(32);
+        Redis::set($sessionId, $user->toJson());
+        Redis::expire($sessionId, config('session.lifetime') * 60);
+
+        return $sessionId;
     }
 
+    public function invalidateSession(string $sessionId): bool
+    {
+        return Redis::del($sessionId) === 1;
+    }
 }

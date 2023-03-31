@@ -25,7 +25,7 @@ class MessageController extends Controller
             $messages =  $this->messageService->getAll();
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
-                'data' => new MessageResource($messages),
+                'data' => MessageResource::collection($messages),
             ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json([
