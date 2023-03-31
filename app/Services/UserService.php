@@ -33,6 +33,17 @@ class UserService
         return $user;
     }
 
+    public function findByEmail(string $email): User
+    {
+        $user = $this->userRepository->getByEmail($email);
+
+        if (!$user) {
+            throw new ModelNotFoundException('Não existe usuário para o email informado');
+        }
+
+        return $user;
+    }
+
     public function create($data): User
     {
         return $this->userRepository->create($data);

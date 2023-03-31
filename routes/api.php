@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::post('/login', [AuthController::class, 'login']);
 
 Route::prefix('/v1')->group(function () {
     Route::middleware(['auth.api'])->group(function () {
@@ -34,6 +37,9 @@ Route::prefix('/v1')->group(function () {
         Route::get('/user/{id}', [UserController::class, 'show'])->name('users.show');
         Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+        Route::post('/logout', [AuthController::class, 'logout'])->name('login.destroy');
+
     });
 });
 

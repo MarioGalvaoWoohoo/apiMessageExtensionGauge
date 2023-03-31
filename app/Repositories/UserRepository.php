@@ -30,6 +30,11 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->find($id);
     }
 
+    public function getByEmail(string $email): ?User
+    {
+        return $this->model->find($email);
+    }
+
     public function update(int $id, array $data): bool
     {
         return $this->model->find($id)->update($data);

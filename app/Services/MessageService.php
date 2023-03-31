@@ -39,11 +39,10 @@ class MessageService
 
     public function update(int $id, array $data): Message
     {
+        $this->findById($id);
         if ($this->messageRepository->update($id, $data)){
             return $this->messageRepository->findById($id);
         }
-
-        return false;
     }
 
     public function delete(int $id): bool

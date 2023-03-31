@@ -50,6 +50,6 @@ class MessageRepository implements MessageRepositoryInterface
     {
         $now = Carbon::now();
 
-        return $this->model->whereRaw('? between initial_display and final_display', [$now])->where('status', 1)->get();
+        return $this->model->whereRaw('? between start_date and end_date', [$now])->where('status', 1)->get();
     }
 }

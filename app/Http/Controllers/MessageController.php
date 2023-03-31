@@ -25,7 +25,7 @@ class MessageController extends Controller
             $messages =  $this->messageService->getAll();
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
-                'data' => $messages,
+                'data' => new MessageResource($messages),
             ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -73,10 +73,10 @@ class MessageController extends Controller
             $validatedData = Validator::make($request->all(), [
                 'title' => 'required|min:20|max:150',
                 'message' => 'required|min:50|max:255',
-                // 'notify' => 'required',
+                'type' => 'required|integer',
                 // 'status' => 'required',
-                'initial_display' => 'required|date',
-                'final_display' => 'required|date',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
                 'user_id' => 'required'
             ]);
 
@@ -87,7 +87,7 @@ class MessageController extends Controller
             $message = $this->messageService->create($request->all());
             return response()->json([
                 'message' => 'Cadastro realizado com sucesso',
-                'data' => $message,
+                'data' => new MessageResource($message),
             ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -100,15 +100,14 @@ class MessageController extends Controller
     public function update(Request $request, int $id)
     {
         try {
-            $this->messageService->findById($id);
 
             $validatedData = Validator::make($request->all(), [
                 'title' => 'required|min:20|max:150',
                 'message' => 'required|min:50|max:255',
-                // 'notify' => 'required',
+                'type' => 'required|integer',
                 // 'status' => 'required',
-                'initial_display' => 'required|date',
-                'final_display' => 'required|date',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
                 'user_id' => 'required'
             ]);
 
@@ -119,7 +118,7 @@ class MessageController extends Controller
             $message = $this->messageService->update($id, $request->all());
             return response()->json([
                 'message' => 'Mensagem atualizada com sucesso!',
-                'data' => $message,
+                'data' => new MessageResource($message),
             ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json([
