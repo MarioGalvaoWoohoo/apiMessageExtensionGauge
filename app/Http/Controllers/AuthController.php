@@ -29,14 +29,14 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(['error' => 'Login e/ou senha inválidos', 'status' => 401], 401);
     }
 
     public function logout()
     {
         try {
             JWTAuth::invalidate(JWTAuth::getToken());
-            return response()->json(['message' => 'Logout realizado com sucesso']);
+            return response()->json(['message' => 'Logout realizado com sucesso', 'status' => 200], 200);
         } catch (JWTException $exception) {
             return response()->json(['error' => 'Falha ao fazer logout, tente novamente.'], 500);
         }
