@@ -4,18 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
     protected $userService;
+    protected $authService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, AuthService $authService)
     {
         $this->userService = $userService;
+        $this->authService = $authService;
     }
 
     /**
@@ -151,4 +155,5 @@ class UserController extends Controller
             ], 404);
         }
     }
+
 }

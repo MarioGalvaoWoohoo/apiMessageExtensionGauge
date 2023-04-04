@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 
@@ -16,11 +17,15 @@ use App\Http\Controllers\UserController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::post('/login', [AuthController::class, 'login']);
+// Route::post('/logout', 'AuthController@logout')->middleware('jwt.auth');
+
+// Route::middleware('jwt.verify')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::prefix('/v1')->group(function () {
-    Route::middleware(['auth.api'])->group(function () {
+    Route::middleware(['jwt.verify'])->group(function () {
 
         // Mensagens
         Route::get('/messages', [MessageController::class, 'listAll'])->name('messages.listAll');
@@ -38,7 +43,7 @@ Route::prefix('/v1')->group(function () {
         Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
-        Route::post('/logout', [AuthController::class, 'logout'])->name('login.destroy');
+        Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     });
 });

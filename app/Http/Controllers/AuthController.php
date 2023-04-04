@@ -10,47 +10,35 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    private AuthService $authService;
-
-    public function __construct(AuthService $authService)
-    {
-        $this->authService = $authService;
-    }
 
     public function login(Request $request): JsonResponse
     {
-        $validatedData = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $credentials = $request->only('email', 'password');
 
-        if ($validatedData->fails()) {
-            return response()->json($validatedData->errors(), 422);
-        }
-
-        $sessionId = $this->authService->authenticateUser($request->email, $request->password);
-
-        if (!$sessionId) {
-            return response()->json(['message' => 'Invalid email or password'], 401);
-        }
-
-        return response()->json(
-            [
-                'session_id' => $sessionId,
-                'user_logged' => new UserResource(auth()->user())
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = JWTAuth::fromUser(Auth::user());
+            return response()->json([
+                'token' => $token,
+                'user' => new UserResource($user)
             ]);
+        }
+
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
-    public function logout(): JsonResponse
+    public function logout()
     {
-        auth()->logout();
-
-        $sessionId = session()->getId();
-        $this->authService->invalidateSession($sessionId);
-
-        return response()->json(['message' => 'Logout efetuado com sucesso.'], 200);
+        try {
+            JWTAuth::invalidate(JWTAuth::getToken());
+            return response()->json(['message' => 'Logout realizado com sucesso']);
+        } catch (JWTException $exception) {
+            return response()->json(['error' => 'Falha ao fazer logout, tente novamente.'], 500);
+        }
     }
 }
