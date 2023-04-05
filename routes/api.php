@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MessageViewedController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -18,11 +19,6 @@ use App\Http\Controllers\UserController;
 |
 */
 Route::post('/login', [AuthController::class, 'login']);
-// Route::post('/logout', 'AuthController@logout')->middleware('jwt.auth');
-
-// Route::middleware('jwt.verify')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 
 Route::prefix('/v1')->group(function () {
     Route::middleware(['jwt.verify'])->group(function () {
@@ -42,6 +38,9 @@ Route::prefix('/v1')->group(function () {
         Route::get('/user/{id}', [UserController::class, 'show'])->name('users.show');
         Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+        // Mensagens visualizadas
+        Route::post('/viewMessageByUser', [MessageViewedController::class, 'viewMessageByUser'])->name('messageViewed.viewMessageByUser');
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
