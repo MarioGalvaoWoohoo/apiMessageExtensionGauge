@@ -23,6 +23,7 @@ class MessageResource extends JsonResource
             'type' => $this->type,
             'startDate' => Carbon::make($this->start_date)->format('Y-m-d'),
             'endDate' => Carbon::make($this->end_date)->format('Y-m-d'),
+            'isRead' => $this->is_read
         ];
     }
 }

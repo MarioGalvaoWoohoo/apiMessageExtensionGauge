@@ -11,8 +11,15 @@ class Message extends Model
 
     protected $fillable = ['title', 'message', 'type', 'status', 'start_date', 'end_date', 'user_id'];
 
-    public function views()
+    protected $appends = ['is_read'];
+
+    public function getIsReadAttribute()
     {
-        return $this->hasMany(MessageView::class);
+        return $this->messagesViewed !== null;
+    }
+
+    public function messagesViewed()
+    {
+        return $this->hasOne(MessageViewed::class);
     }
 }
