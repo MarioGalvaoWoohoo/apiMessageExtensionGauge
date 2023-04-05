@@ -51,16 +51,14 @@ class MessageRepository implements MessageRepositoryInterface
     {
         $now = Carbon::now();
 
-        $unreadMessages = DB::table('messages')
-            ->leftJoin('messages_viewed', function ($join) use ($userId) {
-                $join->on('messages.id', '=', 'messages_viewed.message_id')
-                    ->where('messages_viewed.unknown_user', '=', $userId)
-                    ->orWhereNull('messages_viewed.id');
+        $unreadMessages = Message::leftJoin('messages_viewed', function ($join) use ($userId) {
+            $join->on('messages.id', '=', 'messages_viewed.message_id')
+                ->where('messages_viewed.unknown_user', '=', $userId);
             })
-            ->select('messages.id', 'messages.title', 'messages.message', 'messages.type', 'messages.start_date', 'messages.end_date', 'messages.status')
+            ->select('messages.*',
+                DB::raw('(CASE WHEN messages_viewed.id IS NULL THEN FALSE ELSE TRUE END) as is_read'))
             ->whereRaw('? between start_date and end_date', [$now])
             ->where('status', 1)
-            ->whereNull('messages_viewed.id')
             ->get();
 
         return new Collection($unreadMessages);
