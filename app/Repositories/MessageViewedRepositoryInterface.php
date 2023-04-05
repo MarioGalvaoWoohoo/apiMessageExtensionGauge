@@ -9,7 +9,7 @@ interface MessageViewedRepositoryInterface
 {
     public function getAll(): Collection;
 
-    public function viewMessageByUser(array $data): Model;
+    public function create(array $data): Model;
 
     public function findById(int $id): ?Model;
 

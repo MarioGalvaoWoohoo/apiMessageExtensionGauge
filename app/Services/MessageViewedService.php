@@ -42,7 +42,7 @@ class MessageViewedService
             throw new ModelNotFoundException('Mensagem já consta como visualizada pelo usuário');
         }
 
-        return $this->messageViewedRepository->viewMessageByUser($data);
+        return $this->messageViewedRepository->create($data);
     }
 
 }

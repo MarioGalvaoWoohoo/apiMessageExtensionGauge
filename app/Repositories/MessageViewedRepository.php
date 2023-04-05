@@ -20,9 +20,9 @@ class MessageViewedRepository implements MessageViewedRepositoryInterface
         return $this->model->all();
     }
 
-    public function viewMessageByUser(array $data): MessageViewed
+    public function create(array $data): Model
     {
-        return $this->model->viewMessageByUser($data);
+        return $this->model->create($data);
     }
 
     public function findById(int $id): ?Model
