@@ -63,7 +63,6 @@ class MessageRepository implements MessageRepositoryInterface
             ->whereNull('messages_viewed.id')
             ->get();
 
-        dd($unreadMessages);
-        return $this->model->whereRaw('? between start_date and end_date', [$now])->where('status', 1)->get();
+        return new Collection($unreadMessages);
     }
 }
