@@ -31,6 +31,7 @@ Route::prefix('/v1')->group(function () {
         Route::delete('/message/{id}', [MessageController::class, 'destroy'])->name('messages.destroy');
         Route::get('/messagesIsActive', [MessageController::class, 'messagesIsActive'])->name('messages.messageIsActive');
         Route::get('/messagesOnTimeIsActive', [MessageController::class, 'messagesOnTimeIsActive'])->name('messages.messageOnTimeIsActive');
+        Route::post('/unreadMessages', [MessageController::class, 'unreadMessages'])->name('messages.unreadMessages');
 
         // Usuários
         Route::get('/users', [UserController::class, 'listAll'])->name('users.listAll');

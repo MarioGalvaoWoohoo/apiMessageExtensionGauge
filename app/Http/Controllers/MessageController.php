@@ -51,10 +51,17 @@ class MessageController extends Controller
         }
     }
 
-    public function messagesOnTimeIsActive()
+    public function unreadMessages(Request $request)
     {
         try {
-            $messages =  $this->messageService->getMessageOnTimeIsActive();
+            $validatedData = Validator::make($request->all(), [
+                'user_id' => 'required|min:30',
+            ]);
+
+            if ($validatedData->fails()) {
+                return response()->json($validatedData->errors(), 422);
+            }
+            $messages =  $this->messageService->unreadMessages($request->user_id);
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
                 'data' => MessageResource::collection($messages),
