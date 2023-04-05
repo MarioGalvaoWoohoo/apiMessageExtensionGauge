@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MessageRequest;
-use App\Http\Resources\MessageResource;
-use App\Models\Message;
-use App\Services\messageViewedService;
+use App\Services\MessageViewedService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Support\Facades\Validator;
