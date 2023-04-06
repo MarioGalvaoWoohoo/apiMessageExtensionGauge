@@ -20,6 +20,12 @@ use App\Http\Controllers\UserController;
 */
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::prefix('/ex')->group(function () {
+    Route::middleware(['auth.api'])->group(function () {
+        Route::get('/unreadMessages', [MessageController::class, 'unreadMessages'])->name('messages.unreadMessages');
+    });
+});
+
 Route::prefix('/v1')->group(function () {
     Route::middleware(['jwt.verify'])->group(function () {
 
