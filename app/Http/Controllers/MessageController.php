@@ -78,10 +78,12 @@ class MessageController extends Controller
             if ($validatedData->fails()) {
                 return response()->json($validatedData->errors(), 422);
             }
-            $messages =  $this->messageService->unreadMessages($request->user_id);
+
+            $messages = $this->messageService->unreadMessages($request->user_id);
+
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
-                'data' => MessagesWithStatusIfReadResource::collection($messages),
+                'data' => $messages,
             ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json([

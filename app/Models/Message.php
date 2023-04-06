@@ -9,7 +9,7 @@ class Message extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'message', 'type', 'status', 'start_date', 'end_date', 'user_id'];
+    protected $fillable = ['id', 'title', 'message', 'type', 'status', 'start_date', 'end_date', 'user_id'];
 
     protected $appends = ['is_read'];
 
@@ -18,7 +18,7 @@ class Message extends Model
         return $this->messagesViewed !== null;
     }
 
-    public function messagesViewed()
+    public function messages_viewed()
     {
         return $this->hasOne(MessageViewed::class);
     }

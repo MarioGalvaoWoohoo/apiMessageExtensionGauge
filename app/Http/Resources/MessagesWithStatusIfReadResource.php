@@ -7,14 +7,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class MessagesWithStatusIfReadResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
     public function toArray($request)
     {
+        dd($this);
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -23,7 +18,7 @@ class MessagesWithStatusIfReadResource extends JsonResource
             'type' => $this->type,
             'startDate' => Carbon::make($this->start_date)->format('Y-m-d'),
             'endDate' => Carbon::make($this->end_date)->format('Y-m-d'),
-            'isRead' => $this->is_read
+            'isRead' => $this->isRead
         ];
     }
 }

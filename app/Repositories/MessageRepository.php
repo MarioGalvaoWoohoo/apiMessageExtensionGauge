@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Http\Resources\MessagesWithStatusIfReadResource;
 use App\Models\Message;
+use App\Models\MessageViewed;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -51,17 +53,21 @@ class MessageRepository implements MessageRepositoryInterface
     {
         $now = Carbon::now();
 
-        $unreadMessages = Message::leftJoin('messages_viewed', function ($join) use ($userId) {
-            $join->on('messages.id', '=', 'messages_viewed.message_id')
-                ->where('messages_viewed.unknown_user', '=', $userId);
-            })
-            ->select('messages.*',
-                DB::raw('(CASE WHEN messages_viewed.id IS NULL THEN FALSE ELSE TRUE END) as is_read'))
+        $messages = $this->model
+            ->select('id', 'title', 'message', 'type', 'start_date', 'end_date')
             ->whereRaw('? between start_date and end_date', [$now])
             ->where('status', 1)
-            ->get();
+            ->with(['messages_viewed' => function ($query) use ($userId) {
+                $query->where('unknown_user', $userId);
+            }])
+            ->get()
+            ->map(function ($message) {
+                $isRead = $message['is_read'] || !empty($message['messages_viewed']);
+                unset($message['messages_viewed']);
+                return array_merge($message->toArray(), ['is_read' => $isRead]);
+            });
 
-        return new Collection($unreadMessages);
+        return new Collection($messages);
     }
 
     public function messagesOnTimeIsActive(): Collection

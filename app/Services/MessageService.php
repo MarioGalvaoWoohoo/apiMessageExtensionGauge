@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Http\Resources\MessagesWithStatusIfReadResource;
 use App\Models\Message;
 use Illuminate\Support\Collection;
 use App\Repositories\MessageRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MessageService
@@ -61,7 +63,7 @@ class MessageService
         return $this->messageRepository->messagesOnTimeIsActive();
     }
 
-    public function unreadMessages(string $userId): Collection
+    public function unreadMessages(string $userId): EloquentCollection
     {
         return $this->messageRepository->unreadMessages($userId);
     }
