@@ -56,6 +56,11 @@ class MessageService
         return $this->messageRepository->getAllIsActive();
     }
 
+    public function messagesOnTimeIsActive(): Collection
+    {
+        return $this->messageRepository->messagesOnTimeIsActive();
+    }
+
     public function unreadMessages(string $userId): Collection
     {
         return $this->messageRepository->unreadMessages($userId);
