@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MessageResource extends JsonResource
+class MessagesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,7 +23,6 @@ class MessageResource extends JsonResource
             'type' => $this->type,
             'startDate' => Carbon::make($this->start_date)->format('Y-m-d'),
             'endDate' => Carbon::make($this->end_date)->format('Y-m-d'),
-            'isRead' => $this->is_read
         ];
     }
 }

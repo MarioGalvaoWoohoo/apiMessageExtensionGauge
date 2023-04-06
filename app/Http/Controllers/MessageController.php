@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MessageRequest;
-use App\Http\Resources\MessageResource;
+use App\Http\Resources\MessagesResource;
+use App\Http\Resources\MessagesWithStatusIfReadResource;
 use App\Models\Message;
 use App\Services\MessageService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -25,7 +26,7 @@ class MessageController extends Controller
             $messages =  $this->messageService->getAll();
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
-                'data' => MessageResource::collection($messages),
+                'data' => MessagesResource::collection($messages),
             ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -41,7 +42,23 @@ class MessageController extends Controller
             $messages =  $this->messageService->getMessageIsActive();
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
-                'data' => MessageResource::collection($messages),
+                'data' => MessagesResource::collection($messages),
+            ], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => false,
+            ], 500);
+        }
+    }
+
+    public function messagesOnTimeIsActive()
+    {
+        try {
+            $messages =  $this->messageService->messagesOnTimeIsActive();
+            return response()->json([
+                'message' => 'Listagem realizada com sucesso',
+                'data' => MessagesResource::collection($messages),
             ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -64,7 +81,7 @@ class MessageController extends Controller
             $messages =  $this->messageService->unreadMessages($request->user_id);
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
-                'data' => MessageResource::collection($messages),
+                'data' => MessagesWithStatusIfReadResource::collection($messages),
             ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -94,7 +111,7 @@ class MessageController extends Controller
             $message = $this->messageService->create($request->all());
             return response()->json([
                 'message' => 'Cadastro realizado com sucesso',
-                'data' => new MessageResource($message),
+                'data' => new MessagesResource($message),
             ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -125,7 +142,7 @@ class MessageController extends Controller
             $message = $this->messageService->update($id, $request->all());
             return response()->json([
                 'message' => 'Mensagem atualizada com sucesso!',
-                'data' => new MessageResource($message),
+                'data' => new MessagesResource($message),
             ], 201);
         } catch (ModelNotFoundException $e) {
             return response()->json([

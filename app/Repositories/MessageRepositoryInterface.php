@@ -13,6 +13,8 @@ interface MessageRepositoryInterface
 
     public function unreadMessages(string $user_id): Collection;
 
+    public function messagesOnTimeIsActive(): Collection;
+
     public function create(array $data): Model;
 
     public function findById(int $id): ?Model;

@@ -63,4 +63,15 @@ class MessageRepository implements MessageRepositoryInterface
 
         return new Collection($unreadMessages);
     }
+
+    public function messagesOnTimeIsActive(): Collection
+    {
+        $now = Carbon::now();
+        return new Collection(
+            $this->model
+            ->where('status', 1)
+            ->whereRaw('? between start_date and end_date', [$now])
+            ->get()
+        );
+    }
 }
