@@ -20,9 +20,11 @@ use App\Http\Controllers\UserController;
 */
 Route::post('/login', [AuthController::class, 'login']);
 
+// Router para a extensão
 Route::prefix('/ex')->group(function () {
     Route::middleware(['auth.api'])->group(function () {
         Route::get('/unreadMessages', [MessageController::class, 'unreadMessages'])->name('messages.unreadMessages');
+        Route::post('/viewMessageByUser', [MessageViewedController::class, 'viewMessageByUser'])->name('messageViewed.viewMessageByUser');
     });
 });
 
@@ -45,9 +47,6 @@ Route::prefix('/v1')->group(function () {
         Route::get('/user/{id}', [UserController::class, 'show'])->name('users.show');
         Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-
-        // Mensagens visualizadas
-        Route::post('/viewMessageByUser', [MessageViewedController::class, 'viewMessageByUser'])->name('messageViewed.viewMessageByUser');
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
