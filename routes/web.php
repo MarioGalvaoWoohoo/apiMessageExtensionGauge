@@ -11,6 +11,6 @@ use App\Models\{
 };
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// })->middleware('guest');
+Route::get('/', function () {
+    return response()->json(['message' => 'API - Message'], 200);
+});
