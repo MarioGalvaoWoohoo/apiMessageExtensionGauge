@@ -171,4 +171,22 @@ class MessageController extends Controller
         }
 
     }
+
+    public function prioritizeMessage(int $id)
+    {
+        try {
+
+            $message = $this->messageService->prioritizeMessage($id);
+
+            return response()->json([
+                'message' => 'Mensagem priorizada com sucesso',
+                'data' => new MessagesResource($message),
+            ], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => false,
+            ], 500);
+        }
+    }
 }

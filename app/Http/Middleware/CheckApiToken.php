@@ -15,7 +15,7 @@ class CheckApiToken
         $apiToken = env('JWT_SECRET');
 
         if ($token !== 'Bearer '.$apiToken) {
-            throw new AuthenticationException('Invalid API token.');
+            return response()->json(['error' => 'Token inválido', 'status' => 401], 401);
         }
 
         return $next($request);

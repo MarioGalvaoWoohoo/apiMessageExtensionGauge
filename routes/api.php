@@ -40,6 +40,7 @@ Route::prefix('/v1')->group(function () {
         Route::get('/messagesIsActive', [MessageController::class, 'messagesIsActive'])->name('messages.messageIsActive');
         Route::get('/messagesOnTimeIsActive', [MessageController::class, 'messagesOnTimeIsActive'])->name('messages.messageOnTimeIsActive');
         Route::get('/unreadMessages', [MessageController::class, 'unreadMessages'])->name('messages.unreadMessages');
+        Route::get('/prioritizeMessage/{id}', [MessageController::class, 'prioritizeMessage'])->name('messages.prioritizeMessage');
 
         // Usuários
         Route::get('/users', [UserController::class, 'listAll'])->name('users.listAll');

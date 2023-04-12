@@ -15,6 +15,8 @@ interface MessageRepositoryInterface
 
     public function messagesOnTimeIsActive(): Collection;
 
+    public function findByMessagePrioritize(): ?Model;
+
     public function create(array $data): Model;
 
     public function findById(int $id): ?Model;
@@ -22,4 +24,12 @@ interface MessageRepositoryInterface
     public function update(int $id, array $data): bool;
 
     public function delete(int $id): bool;
+
+    public function deprioritizeAllMessage(): void;
+
+    public function prioritizeMessage(int $id): Model;
+
+    public function checkDisplayedMessage($messageId): bool;
+
+    public function checkIfMessageIsActive($messageId): bool;
 }
