@@ -32,4 +32,5 @@ interface MessageRepositoryInterface
     public function checkDisplayedMessage($messageId): bool;
 
     public function checkIfMessageIsActive($messageId): bool;
+
 }

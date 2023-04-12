@@ -25,7 +25,7 @@ Route::prefix('/ex')->group(function () {
     Route::middleware(['auth.api'])->group(function () {
         Route::get('/unreadMessages', [MessageController::class, 'unreadMessages'])->name('messages.unreadMessages');
         Route::post('/viewMessageByUser', [MessageViewedController::class, 'viewMessageByUser'])->name('messageViewed.viewMessageByUser');
-        Route::get('/prioritizeMessage/{id}', [MessageController::class, 'viewMessagePriority'])->name('messages.viewMessagePriority');
+        Route::get('/viewMessagePriority', [MessageController::class, 'viewMessagePriority'])->name('messages.viewMessagePriority');
     });
 });
 

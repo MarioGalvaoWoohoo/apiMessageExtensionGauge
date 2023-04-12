@@ -105,4 +105,9 @@ class MessageService
         return $this->messageRepository->prioritizeMessage($messageId);
     }
 
+    public function getMessagePriority(): ?Message
+    {
+        return $this->messageRepository->findByMessagePrioritize();
+    }
+
 }
