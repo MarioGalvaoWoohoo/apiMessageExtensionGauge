@@ -94,11 +94,14 @@ class MessageService
         return $this->messageRepository->unreadMessages($userId);
     }
 
-    public function prioritizeMessage(int $messageId): Message
+    public function prioritizeMessage(array $data): Message
     {
+        $messageId = $data['messageId'];
+
         $this->findById($messageId);
         $this->checkIfMessageIsActive($messageId);
         $this->checkIfMessageIsWithinTheDisplayPeriod($messageId);
+
         return $this->messageRepository->prioritizeMessage($messageId);
     }
 

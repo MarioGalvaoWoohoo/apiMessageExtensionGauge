@@ -172,11 +172,18 @@ class MessageController extends Controller
 
     }
 
-    public function prioritizeMessage(int $id)
+    public function prioritizeMessage(Request $request)
     {
         try {
+            $validatedData = Validator::make($request->all(), [
+                'messageId' => 'required|integer',
+            ]);
 
-            $message = $this->messageService->prioritizeMessage($id);
+            if ($validatedData->fails()) {
+                return response()->json($validatedData->errors(), 422);
+            }
+
+            $message = $this->messageService->prioritizeMessage($request->all());
 
             return response()->json([
                 'message' => 'Mensagem priorizada com sucesso',
