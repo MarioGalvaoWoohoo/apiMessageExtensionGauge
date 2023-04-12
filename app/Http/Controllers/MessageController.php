@@ -27,7 +27,7 @@ class MessageController extends Controller
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
                 'data' => MessagesResource::collection($messages),
-            ], 201);
+            ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -43,7 +43,7 @@ class MessageController extends Controller
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
                 'data' => MessagesResource::collection($messages),
-            ], 201);
+            ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -59,7 +59,7 @@ class MessageController extends Controller
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
                 'data' => MessagesResource::collection($messages),
-            ], 201);
+            ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -84,7 +84,7 @@ class MessageController extends Controller
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
                 'data' => $messages,
-            ], 201);
+            ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -162,7 +162,7 @@ class MessageController extends Controller
             return response()->json([
                 'message' => 'Mensagem removida com sucesso!',
                 'data' => [],
-            ], 201);
+            ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -170,5 +170,47 @@ class MessageController extends Controller
             ], 404);
         }
 
+    }
+
+    public function prioritizeMessage(Request $request)
+    {
+        try {
+            $validatedData = Validator::make($request->all(), [
+                'messageId' => 'required|integer',
+            ]);
+
+            if ($validatedData->fails()) {
+                return response()->json($validatedData->errors(), 422);
+            }
+
+            $message = $this->messageService->prioritizeMessage($request->all());
+
+            return response()->json([
+                'message' => 'Mensagem priorizada com sucesso',
+                'data' => new MessagesResource($message),
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => false,
+            ], 500);
+        }
+    }
+
+    public function viewMessagePriority()
+    {
+        try {
+            $message =  $this->messageService->getMessagePriority();
+
+            return response()->json([
+                'message' => 'Listagem realizada com sucesso',
+                'data' => $message !== null ? new MessagesResource($message) : [],
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => false,
+            ], 500);
+        }
     }
 }

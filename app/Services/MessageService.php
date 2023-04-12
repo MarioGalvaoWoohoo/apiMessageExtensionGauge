@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Resources\MessagesWithStatusIfReadResource;
 use App\Models\Message;
 use Illuminate\Support\Collection;
 use App\Repositories\MessageRepositoryInterface;
@@ -32,6 +31,33 @@ class MessageService
         }
 
         return $message;
+    }
+
+    public function checkIfMessageIsWithinTheDisplayPeriod(int $messageId)
+    {
+        $message = $this->messageRepository->checkDisplayedMessage($messageId);
+
+        if (!$message) {
+            throw new ModelNotFoundException('Mensagem fora do prazo de exibição. Mensagem priorizada deve esta dentro do prazo de exibição.');
+        }
+
+        return $message;
+    }
+
+    public function checkIfMessageIsActive(int $messageId)
+    {
+        $message = $this->messageRepository->checkIfMessageIsActive($messageId);
+
+        if (!$message) {
+            throw new ModelNotFoundException('Mensagem não esta ativa. Mensagem priorizada deve esta ativa.');
+        }
+
+        return $message;
+    }
+
+    public function findByMessagePrioritize(): Message
+    {
+        return $this->messageRepository->findByMessagePrioritize();
     }
 
     public function create($data): Message
@@ -67,4 +93,21 @@ class MessageService
     {
         return $this->messageRepository->unreadMessages($userId);
     }
+
+    public function prioritizeMessage(array $data): Message
+    {
+        $messageId = $data['messageId'];
+
+        $this->findById($messageId);
+        $this->checkIfMessageIsActive($messageId);
+        $this->checkIfMessageIsWithinTheDisplayPeriod($messageId);
+
+        return $this->messageRepository->prioritizeMessage($messageId);
+    }
+
+    public function getMessagePriority(): ?Message
+    {
+        return $this->messageRepository->findByMessagePrioritize();
+    }
+
 }
