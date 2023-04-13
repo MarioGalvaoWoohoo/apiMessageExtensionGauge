@@ -47,9 +47,9 @@ class MessageRepository implements MessageRepositoryInterface
         }
     }
 
-    public function deprioritizeAllMessage(): void
+    public function deprioritizeAllMessage(): bool
     {
-        $this->model->where('priority', 1)->update(['priority' => 0]);
+        return $this->model->where('priority', 1)->update(['priority' => 0]);
     }
 
     public function prioritizeMessage($messageId): Model

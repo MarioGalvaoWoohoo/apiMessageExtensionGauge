@@ -25,7 +25,7 @@ interface MessageRepositoryInterface
 
     public function delete(int $id): bool;
 
-    public function deprioritizeAllMessage(): void;
+    public function deprioritizeAllMessage(): bool;
 
     public function prioritizeMessage(int $id): Model;
 

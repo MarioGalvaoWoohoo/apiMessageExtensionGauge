@@ -213,4 +213,19 @@ class MessageController extends Controller
             ], 500);
         }
     }
+
+    public function deprioritizeMessage()
+    {
+        try {
+            return response()->json([
+                'message' => 'Mensagem despriorizada com sucesso',
+                'data' => $this->messageService->deprioritizeMessages(),
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => false,
+            ], 500);
+        }
+    }
 }
