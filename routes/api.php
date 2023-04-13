@@ -42,7 +42,7 @@ Route::prefix('/v1')->group(function () {
         Route::get('/messagesOnTimeIsActive', [MessageController::class, 'messagesOnTimeIsActive'])->name('messages.messageOnTimeIsActive');
         Route::get('/unreadMessages', [MessageController::class, 'unreadMessages'])->name('messages.unreadMessages');
         Route::put('/prioritizeMessage', [MessageController::class, 'prioritizeMessage'])->name('messages.prioritizeMessage');
-        Route::get('/deprioritizeMessage', [MessageController::class, 'deprioritizeMessage'])->name('messages.deprioritizeMessage');
+        Route::delete('/deprioritizeMessage', [MessageController::class, 'deprioritizeMessage'])->name('messages.deprioritizeMessage');
 
         // Usuários
         Route::get('/users', [UserController::class, 'listAll'])->name('users.listAll');
