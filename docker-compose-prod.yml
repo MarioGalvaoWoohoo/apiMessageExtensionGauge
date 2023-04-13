@@ -1,0 +1,57 @@
+version: "3.7"
+services:
+
+    app:
+        container_name: app-message
+        build:
+            args:
+                user: galvao
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: laravel-app
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        networks:
+            - api-extension
+
+    nginx:
+        container_name: nginx-message
+        image: nginx:alpine
+        restart: unless-stopped
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/:/etc/nginx/conf.d/
+        networks:
+            - api-extension
+
+    mysql:
+        container_name: db-message
+        image: mysql:5.7.33
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+        volumes:
+            - ./.docker/mysql/dbdata:/var/lib/mysql
+        ports:
+            - 3306:3306
+        networks:
+            - api-extension
+
+    # redis:
+    #     container_name: redis-gauge-message
+    #     image: redis:latest
+    #     networks:
+    #         - api-extension-gauge
+
+networks:
+    api-extension:
+        driver: bridge
