@@ -2,13 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Http\Resources\MessagesWithStatusIfReadResource;
-use App\Models\Message;
-use App\Models\MessageViewed;
+
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Message;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 
 class MessageRepository implements MessageRepositoryInterface
 {
@@ -80,7 +78,7 @@ class MessageRepository implements MessageRepositoryInterface
 
         $messages = $this->model
             ->select('id', 'title', 'message', 'priority', 'type', 'start_date', 'end_date')
-            ->whereRaw('? between start_date and end_date', [$now])
+            ->whereRaw('? between start_date and end_date', [$now->format('Y-m-d')])
             ->where('status', 1)
             ->with(['messages_viewed' => function ($query) use ($userId) {
                 $query->where('unknown_user', $userId);
@@ -102,7 +100,7 @@ class MessageRepository implements MessageRepositoryInterface
         return new Collection(
             $this->model
             ->where('status', 1)
-            ->whereRaw('? between start_date and end_date', [$now])
+            ->whereRaw('? between start_date and end_date', [$now->format('Y-m-d')])
             ->get()
         );
     }
@@ -110,9 +108,11 @@ class MessageRepository implements MessageRepositoryInterface
     public function checkDisplayedMessage($messageId): bool
     {
         $now = Carbon::now();
+
         $message = $this->model
             ->where('id', $messageId)
-            ->whereRaw('? between start_date and end_date', [$now])
+            ->where('status', 1)
+            ->whereRaw('? between start_date and end_date', [$now->format('Y-m-d')])
             ->first();
 
         if ($message) {

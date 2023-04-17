@@ -2,11 +2,15 @@
 
 namespace App\Services;
 
+use App\Exceptions\CustomException;
 use App\Models\Message;
 use Illuminate\Support\Collection;
 use App\Repositories\MessageRepositoryInterface;
+use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class MessageService
 {
@@ -24,24 +28,19 @@ class MessageService
 
     public function findById(int $id): Message
     {
-        $message = $this->messageRepository->findById($id);
+        try {
+            $message = $this->messageRepository->findById($id);
 
-        if (!$message) {
-            throw new ModelNotFoundException('Não existe mensagem para o ID informado');
+            if (!$message) {
+                throw new ValidationException('Não existe mensagem para o ID informado');
+            }
+
+            return $message;
+        } catch (ValidationException $exception) {
+            throw new CustomException([
+                "error" => $exception->validator,
+            ], $exception->status);
         }
-
-        return $message;
-    }
-
-    public function checkIfMessageIsWithinTheDisplayPeriod(int $messageId)
-    {
-        $message = $this->messageRepository->checkDisplayedMessage($messageId);
-
-        if (!$message) {
-            throw new ModelNotFoundException('Mensagem fora do prazo de exibição. Mensagem priorizada deve esta dentro do prazo de exibição.');
-        }
-
-        return $message;
     }
 
     public function checkIfMessageIsActive(int $messageId)
@@ -96,13 +95,21 @@ class MessageService
 
     public function prioritizeMessage(array $data): Message
     {
-        $messageId = $data['messageId'];
+        try {
+            $messageId = $data['messageId'];
 
-        $this->findById($messageId);
-        $this->checkIfMessageIsActive($messageId);
-        $this->checkIfMessageIsWithinTheDisplayPeriod($messageId);
+            $messageWithinPeriod = $this->messageRepository->checkDisplayedMessage($messageId);
 
-        return $this->messageRepository->prioritizeMessage($messageId);
+            if (!$messageWithinPeriod) {
+                throw new ValidationException('Mensagem fora do prazo de exibição ou inativa.');
+            }
+
+            return $this->messageRepository->prioritizeMessage($messageId);
+        } catch (ValidationException $exception) {
+            throw new CustomException([
+                "error" => $exception->validator,
+            ], $exception->status);
+        }
     }
 
     public function deprioritizeMessages(): bool

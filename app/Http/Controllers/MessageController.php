@@ -10,6 +10,7 @@ use App\Services\MessageService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class MessageController extends Controller
 {
@@ -189,11 +190,11 @@ class MessageController extends Controller
                 'message' => 'Mensagem priorizada com sucesso',
                 'data' => new MessagesResource($message),
             ], 200);
-        } catch (ModelNotFoundException $e) {
+        } catch (ValidationException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
                 'data' => false,
-            ], 500);
+            ], 422);
         }
     }
 
