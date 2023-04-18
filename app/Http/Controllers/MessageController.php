@@ -98,7 +98,7 @@ class MessageController extends Controller
     {
         try {
             $validatedData = Validator::make($request->all(), [
-                'title' => 'required|min:20|max:150',
+                'title' => 'required|min:10',
                 'message' => 'required|min:50|max:255',
                 'type' => 'required|integer',
                 // 'status' => 'required',
