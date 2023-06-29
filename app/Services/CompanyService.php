@@ -6,11 +6,7 @@ use App\Exceptions\CustomException;
 use App\Models\Company;
 use App\Repositories\CompanyRepositoryInterface;
 use Illuminate\Support\Collection;
-use Exception;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CompanyService
 {

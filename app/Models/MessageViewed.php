@@ -11,7 +11,7 @@ class MessageViewed extends Model
 
     protected $table = 'messages_viewed';
 
-    protected $fillable = ['unknown_user', 'message_id'];
+    protected $fillable = ['unknown_user', 'message_id', 'company_id'];
 
     public $timestamps = false;
 

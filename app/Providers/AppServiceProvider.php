@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\CompanyRepository;
 use App\Repositories\CompanyRepositoryInterface;
 use App\Repositories\MessageRepository;
 use App\Repositories\MessageRepositoryInterface;
@@ -29,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(MessageRepositoryInterface::class, MessageRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(MessageViewedRepositoryInterface::class, MessageViewedRepository::class);
+        $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
 
         // Registrar o MessageService. Caso seja necessário outro Repository, adicionar outro singleton
         $this->app->singleton(MessageService::class, function ($app) {
