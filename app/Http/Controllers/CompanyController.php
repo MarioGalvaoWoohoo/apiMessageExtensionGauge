@@ -89,7 +89,7 @@ class CompanyController extends Controller
 
             $message = $this->companyService->update($id, $request->all());
             return response()->json([
-                'message' => 'Mensagem atualizada com sucesso!',
+                'message' => 'Empresa atualizada com sucesso!',
                 'data' => new CompanyResource($message),
             ], 201);
         } catch (ModelNotFoundException $e) {
@@ -106,7 +106,7 @@ class CompanyController extends Controller
         try {
             $this->companyService->delete($id);
             return response()->json([
-                'message' => 'Mensagem removida com sucesso!',
+                'message' => 'Company removida com sucesso!',
                 'data' => [],
             ], 200);
         } catch (ModelNotFoundException $e) {

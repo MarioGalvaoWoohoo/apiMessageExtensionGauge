@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 interface MessageRepositoryInterface
 {
-    public function getAll(): Collection;
+    public function getAll(int $companyId): Collection;
 
-    public function getAllIsActive(): Collection;
+    public function getAllIsActive(int $companyId): Collection;
 
     public function unreadMessages(string $user_id): Collection;
 
-    public function messagesOnTimeIsActive(): Collection;
+    public function messagesOnTimeIsActive(int $companyId): Collection;
 
-    public function findByMessagePrioritize(): ?Model;
+    public function findByMessagePrioritize(int $companyId): ?Model;
 
     public function create(array $data): Model;
 
@@ -25,12 +25,12 @@ interface MessageRepositoryInterface
 
     public function delete(int $id): bool;
 
-    public function deprioritizeAllMessage(): bool;
+    public function deprioritizeAllMessage(int $companyId): bool;
 
-    public function prioritizeMessage(int $id): Model;
+    public function prioritizeMessage(int $id, int $companyId): Model;
 
     public function checkDisplayedMessage($messageId): bool;
 
-    public function checkIfMessageIsActive($messageId): bool;
+    public function checkIfMessageIsActive($messageId, $companyId): bool;
 
 }

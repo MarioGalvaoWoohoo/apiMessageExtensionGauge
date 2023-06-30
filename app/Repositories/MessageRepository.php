@@ -17,9 +17,9 @@ class MessageRepository implements MessageRepositoryInterface
         $this->model = $model;
     }
 
-    public function getAll(): Collection
+    public function getAll(int $companyId): Collection
     {
-        return $this->model->all();
+        return $this->model->where('company_id', $companyId)->get();
     }
 
     public function create(array $data): Model
@@ -32,7 +32,7 @@ class MessageRepository implements MessageRepositoryInterface
         return $this->model->find($id);
     }
 
-    public function findByMessagePrioritize(): ?Model
+    public function findByMessagePrioritize(int $companyId): ?Model
     {
         $message = $this->model
             ->where('priority', 1)
@@ -45,14 +45,14 @@ class MessageRepository implements MessageRepositoryInterface
         }
     }
 
-    public function deprioritizeAllMessage(): bool
+    public function deprioritizeAllMessage(int $companyId): bool
     {
         return $this->model->where('priority', 1)->update(['priority' => 0]);
     }
 
-    public function prioritizeMessage($messageId): Model
+    public function prioritizeMessage(int $messageId, int $companyId): Model
     {
-        $this->deprioritizeAllMessage();
+        $this->deprioritizeAllMessage($companyId);
         $this->model->where('id', $messageId)->update(['priority' => 1]);
         return $this->model->find($messageId);
     }
@@ -67,7 +67,7 @@ class MessageRepository implements MessageRepositoryInterface
         return $this->model->find($id)->delete();
     }
 
-    public function getAllIsActive(): Collection
+    public function getAllIsActive(int $companyId): Collection
     {
         return $this->model->where('status', 1)->get();
     }
@@ -94,12 +94,13 @@ class MessageRepository implements MessageRepositoryInterface
         return new Collection($messages);
     }
 
-    public function messagesOnTimeIsActive(): Collection
+    public function messagesOnTimeIsActive(int $companyId): Collection
     {
         $now = Carbon::now();
         return new Collection(
             $this->model
             ->where('status', 1)
+            ->where('company_id', $companyId)
             ->whereRaw('? between start_date and end_date', [$now->format('Y-m-d')])
             ->get()
         );
@@ -122,7 +123,7 @@ class MessageRepository implements MessageRepositoryInterface
         }
     }
 
-    public function checkIfMessageIsActive($messageId): bool
+    public function checkIfMessageIsActive($messageId, $companyId): bool
     {
         $message = $this->model->where('id', $messageId)->whereRaw('status', 1)->first();
 

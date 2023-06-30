@@ -21,10 +21,10 @@ class MessageController extends Controller
         $this->messageService = $messageService;
     }
 
-    public function listAll()
+    public function listAll(Request $request)
     {
         try {
-            $messages =  $this->messageService->getAll();
+            $messages =  $this->messageService->getAll($request->header('company'));
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
                 'data' => MessagesResource::collection($messages),
@@ -37,10 +37,10 @@ class MessageController extends Controller
         }
     }
 
-    public function messagesIsActive()
+    public function messagesIsActive(Request $request)
     {
         try {
-            $messages =  $this->messageService->getMessageIsActive();
+            $messages =  $this->messageService->getMessageIsActive($request->header('company'));
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
                 'data' => MessagesResource::collection($messages),
@@ -53,10 +53,10 @@ class MessageController extends Controller
         }
     }
 
-    public function messagesOnTimeIsActive()
+    public function messagesOnTimeIsActive(Request $request)
     {
         try {
-            $messages =  $this->messageService->messagesOnTimeIsActive();
+            $messages =  $this->messageService->messagesOnTimeIsActive($request->header('company'));
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
                 'data' => MessagesResource::collection($messages),
@@ -184,7 +184,7 @@ class MessageController extends Controller
                 return response()->json($validatedData->errors(), 422);
             }
 
-            $message = $this->messageService->prioritizeMessage($request->all());
+            $message = $this->messageService->prioritizeMessage($request->all(), $request->header('company'));
 
             return response()->json([
                 'message' => 'Mensagem priorizada com sucesso',
@@ -198,10 +198,10 @@ class MessageController extends Controller
         }
     }
 
-    public function viewMessagePriority()
+    public function viewMessagePriority(Request $request)
     {
         try {
-            $message =  $this->messageService->getMessagePriority();
+            $message =  $this->messageService->getMessagePriority($request->header('company'));
 
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
@@ -215,12 +215,12 @@ class MessageController extends Controller
         }
     }
 
-    public function deprioritizeMessage()
+    public function deprioritizeMessage(Request $request)
     {
         try {
             return response()->json([
                 'message' => 'Mensagem despriorizada com sucesso',
-                'data' => $this->messageService->deprioritizeMessages(),
+                'data' => $this->messageService->deprioritizeMessages($request->header('company')),
             ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([

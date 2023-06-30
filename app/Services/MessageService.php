@@ -21,9 +21,9 @@ class MessageService
         $this->messageRepository = $messageRepository;
     }
 
-    public function getAll(): Collection
+    public function getAll(int $companyId): Collection
     {
-        return $this->messageRepository->getAll();
+        return $this->messageRepository->getAll($companyId);
     }
 
     public function findById(int $id): Message
@@ -43,9 +43,9 @@ class MessageService
         }
     }
 
-    public function checkIfMessageIsActive(int $messageId)
+    public function checkIfMessageIsActive(int $messageId, int $companyId)
     {
-        $message = $this->messageRepository->checkIfMessageIsActive($messageId);
+        $message = $this->messageRepository->checkIfMessageIsActive($messageId, $companyId);
 
         if (!$message) {
             throw new ModelNotFoundException('Mensagem não esta ativa. Mensagem priorizada deve esta ativa.');
@@ -54,9 +54,9 @@ class MessageService
         return $message;
     }
 
-    public function findByMessagePrioritize(): Message
+    public function findByMessagePrioritize(int $companyId): Message
     {
-        return $this->messageRepository->findByMessagePrioritize();
+        return $this->messageRepository->findByMessagePrioritize($companyId);
     }
 
     public function create($data): Message
@@ -78,14 +78,14 @@ class MessageService
         return $this->messageRepository->delete($id);
     }
 
-    public function getMessageIsActive(): Collection
+    public function getMessageIsActive($companyId): Collection
     {
-        return $this->messageRepository->getAllIsActive();
+        return $this->messageRepository->getAllIsActive($companyId);
     }
 
-    public function messagesOnTimeIsActive(): Collection
+    public function messagesOnTimeIsActive(int $companyId): Collection
     {
-        return $this->messageRepository->messagesOnTimeIsActive();
+        return $this->messageRepository->messagesOnTimeIsActive($companyId);
     }
 
     public function unreadMessages(string $userId): EloquentCollection
@@ -93,7 +93,7 @@ class MessageService
         return $this->messageRepository->unreadMessages($userId);
     }
 
-    public function prioritizeMessage(array $data): Message
+    public function prioritizeMessage(array $data, $companyId): Message
     {
         try {
             $messageId = $data['messageId'];
@@ -104,7 +104,7 @@ class MessageService
                 throw new ValidationException('Mensagem fora do prazo de exibição ou inativa.');
             }
 
-            return $this->messageRepository->prioritizeMessage($messageId);
+            return $this->messageRepository->prioritizeMessage($messageId, $companyId);
         } catch (ValidationException $exception) {
             throw new CustomException([
                 "error" => $exception->validator,
@@ -112,14 +112,14 @@ class MessageService
         }
     }
 
-    public function deprioritizeMessages(): bool
+    public function deprioritizeMessages(int $companyId): bool
     {
-        return $this->messageRepository->deprioritizeAllMessage();
+        return $this->messageRepository->deprioritizeAllMessage($companyId);
     }
 
-    public function getMessagePriority(): ?Message
+    public function getMessagePriority(int $companyId): ?Message
     {
-        return $this->messageRepository->findByMessagePrioritize();
+        return $this->messageRepository->findByMessagePrioritize($companyId);
     }
 
 }
