@@ -24,7 +24,9 @@ class MessageController extends Controller
     public function listAll(Request $request)
     {
         try {
-            $messages =  $this->messageService->getAll($request->header('company'));
+            // $companyId = $request->header('company');
+            $companyId = 1;
+            $messages =  $this->messageService->getAll($companyId);
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
                 'data' => MessagesResource::collection($messages),
@@ -40,7 +42,9 @@ class MessageController extends Controller
     public function messagesIsActive(Request $request)
     {
         try {
-            $messages =  $this->messageService->getMessageIsActive($request->header('company'));
+            // $companyId = $request->header('company');
+            $companyId = 1;
+            $messages =  $this->messageService->getMessageIsActive($companyId);
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
                 'data' => MessagesResource::collection($messages),
@@ -56,7 +60,9 @@ class MessageController extends Controller
     public function messagesOnTimeIsActive(Request $request)
     {
         try {
-            $messages =  $this->messageService->messagesOnTimeIsActive($request->header('company'));
+            // $companyId = $request->header('company');
+            $companyId = 1;
+            $messages =  $this->messageService->messagesOnTimeIsActive($companyId);
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
                 'data' => MessagesResource::collection($messages),
@@ -110,7 +116,7 @@ class MessageController extends Controller
             if ($validatedData->fails()) {
                 return response()->json($validatedData->errors(), 422);
             }
-
+            $request['company_id'] = 1;
             $message = $this->messageService->create($request->all());
             return response()->json([
                 'message' => 'Cadastro realizado com sucesso',
@@ -176,6 +182,8 @@ class MessageController extends Controller
     public function prioritizeMessage(Request $request)
     {
         try {
+            // $companyId = $request->header('company');
+            $companyId = 1;
             $validatedData = Validator::make($request->all(), [
                 'messageId' => 'required|integer',
             ]);
@@ -184,7 +192,7 @@ class MessageController extends Controller
                 return response()->json($validatedData->errors(), 422);
             }
 
-            $message = $this->messageService->prioritizeMessage($request->all(), $request->header('company'));
+            $message = $this->messageService->prioritizeMessage($request->all(), $companyId);
 
             return response()->json([
                 'message' => 'Mensagem priorizada com sucesso',
@@ -201,7 +209,9 @@ class MessageController extends Controller
     public function viewMessagePriority(Request $request)
     {
         try {
-            $message =  $this->messageService->getMessagePriority($request->header('company'));
+            // $companyId = $request->header('company');
+            $companyId = 1;
+            $message =  $this->messageService->getMessagePriority($companyId);
 
             return response()->json([
                 'message' => 'Listagem realizada com sucesso',
@@ -218,9 +228,11 @@ class MessageController extends Controller
     public function deprioritizeMessage(Request $request)
     {
         try {
+            // $companyId = $request->header('company');
+            $companyId = 1;
             return response()->json([
                 'message' => 'Mensagem despriorizada com sucesso',
-                'data' => $this->messageService->deprioritizeMessages($request->header('company')),
+                'data' => $this->messageService->deprioritizeMessages($companyId),
             ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([

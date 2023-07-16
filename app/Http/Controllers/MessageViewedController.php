@@ -27,7 +27,7 @@ class MessageViewedController extends Controller
             if ($validatedData->fails()) {
                 return response()->json($validatedData->errors(), 422);
             }
-
+            $request['company_id'] = 1;
             $messageviewed = $this->messageViewedService->viewMessageByUser($request->all());
             return response()->json([
                 'message' => 'Mensagem visualizada com sucesso',
