@@ -9,7 +9,6 @@
             </div>
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                 <form  method="POST" action="{{ route('login') }}">
-                    @csrf
                     <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
                         <p class="lead fw-normal mb-0 me-3">
                             <img src="{{ asset('images/logo.png') }}" class="img-fluid" alt="Sample image">

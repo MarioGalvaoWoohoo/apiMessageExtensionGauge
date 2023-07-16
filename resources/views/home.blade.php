@@ -4,19 +4,31 @@
 <section class="vh-100">
     <div class="container-fluid h-custom">
         <h1>Home</h1>
-        <!-- <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn btn-danger">Logout</button>
-        </form> -->
-        <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
 
-                    You are logged in!
-                </div>
+        <div class="card-body">
+            <table id="datatable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>John Doe</td>
+                        <td>johndoe@example.com</td>
+                        <td>Admin</td>
+                    </tr>
+                    <tr>
+                        <td>Jane Smith</td>
+                        <td>janesmith@example.com</td>
+                        <td>User</td>
+                    </tr>
+                    <!-- Add more rows here -->
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-black">
         <!-- Copyright -->
@@ -25,5 +37,17 @@
         </div>
         <!-- Copyright -->
     </div>
+    <script>
+        $(document).ready(function() {
+            var table = $('#datatable').DataTable({
+                // Opções de configuração
+            });
+
+            // Adicionar a funcionalidade de pesquisa
+            $('#datatable_filter input').unbind().bind('keyup', function() {
+                table.search(this.value).draw();
+            });
+        });
+    </script>
 </section>
 @endsection
