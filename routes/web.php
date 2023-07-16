@@ -1,16 +1,15 @@
 <?php
 
-use App\Models\{
-    Comment,
-    Course,
-    Image,
-    Permission,
-    User,
-    Preference,
-    Tag
-};
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthAppController;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return response()->json(['message' => 'API - Message'], 200);
+Route::get('/login', [AuthAppController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthAppController::class, 'loginApp']);
+
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::group(['middleware' => 'auth'], function () {
 });
+
