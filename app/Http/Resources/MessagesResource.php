@@ -22,6 +22,7 @@ class MessagesResource extends JsonResource
             'status' => $this->status,
             'priority' => $this->priority,
             'type' => $this->type,
+            'company' => $this->company_id,
             'startDate' => Carbon::make($this->start_date)->format('Y-m-d'),
             'endDate' => Carbon::make($this->end_date)->format('Y-m-d'),
         ];

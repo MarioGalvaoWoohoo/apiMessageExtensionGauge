@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MessageViewedController;
@@ -52,6 +53,14 @@ Route::prefix('/v1')->group(function () {
         Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+        // Company
+        // Mensagens
+        Route::get('/companies', [CompanyController::class, 'listAll'])->name('companies.listAll');
+        Route::post('/company', [CompanyController::class, 'store'])->name('companies.store');
+        Route::get('/company/{id}', [CompanyController::class, 'show'])->name('companies.show');
+        Route::put('/company/{id}', [CompanyController::class, 'update'])->name('companies.update');
+        Route::delete('/company/{id}', [CompanyController::class, 'destroy'])->name('companies.destroy');
 
     });
 });
