@@ -88,9 +88,9 @@ class MessageService
         return $this->messageRepository->messagesOnTimeIsActive($companyId);
     }
 
-    public function unreadMessages(string $userId): EloquentCollection
+    public function unreadMessages(string $userId, $company): EloquentCollection
     {
-        return $this->messageRepository->unreadMessages($userId);
+        return $this->messageRepository->unreadMessages($userId, $company);
     }
 
     public function prioritizeMessage(array $data, $companyId): Message

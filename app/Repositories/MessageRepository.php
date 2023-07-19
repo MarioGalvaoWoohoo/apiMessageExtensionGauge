@@ -72,7 +72,7 @@ class MessageRepository implements MessageRepositoryInterface
         return $this->model->where('status', 1)->get();
     }
 
-    public function unreadMessages(string $userId): Collection
+    public function unreadMessages(string $userId, int $company): Collection
     {
         $now = Carbon::now();
 
@@ -80,6 +80,7 @@ class MessageRepository implements MessageRepositoryInterface
             ->select('id', 'title', 'message', 'priority', 'type', 'start_date', 'end_date')
             ->whereRaw('? between start_date and end_date', [$now->format('Y-m-d')])
             ->where('status', 1)
+            ->where('company_id', $company)
             ->with(['messages_viewed' => function ($query) use ($userId) {
                 $query->where('unknown_user', $userId);
             }])

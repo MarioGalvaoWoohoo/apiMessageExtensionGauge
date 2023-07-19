@@ -11,7 +11,7 @@ interface MessageRepositoryInterface
 
     public function getAllIsActive(int $companyId): Collection;
 
-    public function unreadMessages(string $user_id): Collection;
+    public function unreadMessages(string $user_id, int $company): Collection;
 
     public function messagesOnTimeIsActive(int $companyId): Collection;
 
