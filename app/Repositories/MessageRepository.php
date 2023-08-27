@@ -36,6 +36,7 @@ class MessageRepository implements MessageRepositoryInterface
     {
         $message = $this->model
             ->where('priority', 1)
+            ->where('company_id', $companyId)
             ->first();
 
         if ($message) {
@@ -69,7 +70,7 @@ class MessageRepository implements MessageRepositoryInterface
 
     public function getAllIsActive(int $companyId): Collection
     {
-        return $this->model->where('status', 1)->get();
+        return $this->model->where('status', 1)->where('company_id', $companyId)->get();
     }
 
     public function unreadMessages(string $userId, int $company): Collection
@@ -126,7 +127,7 @@ class MessageRepository implements MessageRepositoryInterface
 
     public function checkIfMessageIsActive($messageId, $companyId): bool
     {
-        $message = $this->model->where('id', $messageId)->whereRaw('status', 1)->first();
+        $message = $this->model->where('id', $messageId)->where('company_id', $companyId)->whereRaw('status', 1)->first();
 
         if ($message) {
             return true;
